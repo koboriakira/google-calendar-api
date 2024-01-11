@@ -49,6 +49,7 @@ export class GoogleCalendarApi extends cdk.Stack {
       code: aws_lambda.Code.fromAsset("../app"),
       role: role,
       layers: [myLayer],
+      timeout: cdk.Duration.seconds(30),
     });
 
     fn.addEnvironment("GAS_DEPLOY_ID", process.env.GAS_DEPLOY_ID || "");
