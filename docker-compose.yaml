@@ -12,7 +12,7 @@ services:
       dockerfile: docker/api/Dockerfile
     env_file:
       - .env
-    working_dir: /workspace
-    command: uvicorn gc_api.main:app --reload --port=8080 --host=0.0.0.0
+    working_dir: /workspace/gc_api
+    command: uvicorn main:app --reload --port=8080 --host=0.0.0.0
     ports:
       - 10112:8080

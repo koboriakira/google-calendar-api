@@ -9,7 +9,7 @@ import requests
 import os
 import json
 import yaml
-from gc_api.custom_logger import get_logger
+from custom_logger import get_logger
 
 logger = get_logger(__name__)
 logger.info("start")
