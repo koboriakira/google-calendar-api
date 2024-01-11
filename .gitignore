@@ -1,3 +1,4 @@
 app/.venv
+app/__pycache__
 python
 dependencies.zip
