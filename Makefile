@@ -6,7 +6,7 @@ generate_layer:
 	rm -rf python
 
 deploy:
-	export-dotenv && cd cdk && cdk deploy --profile private --require-approval never
+	cd cdk && cdk deploy --profile private --require-approval never
 
 bootstrap:
 	cd cdk && cdk bootstrap --profile private

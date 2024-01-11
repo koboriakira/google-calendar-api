@@ -23,6 +23,33 @@ export class GoogleCalendarApi extends Stack {
     super(scope, id, props);
 
     // Lambdaの実行ロールを取得または新規作成
+    const role = this.makeRole();
+
+    // Lambda レイヤーの定義
+    const myLayer = this.makeLayer();
+
+    const fn = this.createLambdaFunction(role, myLayer);
+
+    // // HTTP API の定義
+    // const httpApi = new aws_apigatewayv2.HttpApi(this, "ApiGateway");
+
+    // // ルートとインテグレーションの設定
+    // httpApi.addRoutes({
+    //   path: "/",
+    //   methods: [aws_apigatewayv2.HttpMethod.GET],
+    //   integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
+    //     "AppIntegration",
+    //     fn
+    //   ),
+    // });
+  }
+
+  /**
+   * Create or retrieve an IAM role for the Lambda function.
+   * @returns {iam.Role} The created or retrieved IAM role.
+   */
+  makeRole() {
+    // Lambdaの実行ロールを取得または新規作成
     const role = new iam.Role(this, "LambdaRole", {
       assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
     });
@@ -42,12 +69,30 @@ export class GoogleCalendarApi extends Stack {
       })
     );
 
-    // Lambda レイヤーの定義
-    const myLayer = new lambda.LayerVersion(this, "Layer", {
+    return role;
+  }
+
+  /**
+   * Create or retrieve a Lambda layer.
+   * @returns {lambda.LayerVersion} The created or retrieved Lambda layer.
+   */
+  makeLayer() {
+    return new lambda.LayerVersion(this, "Layer", {
       code: lambda.Code.fromAsset(LAYER_ZIP_PATH), // レイヤーの内容を含むディレクトリ
       compatibleRuntimes: [RUNTIME], // このレイヤーが互換性を持つランタイム
     });
+  }
 
+  /**
+   * Create a Lambda function.
+   * @param {iam.Role} role The IAM role for the Lambda function.
+   * @param {lambda.LayerVersion} myLayer The Lambda layer to be used.
+   * @returns {lambda.Function} The created Lambda function.
+   */
+  createLambdaFunction(
+    role: iam.Role,
+    myLayer: lambda.LayerVersion
+  ): lambda.Function {
     const fn = new lambda.Function(this, "Lambda", {
       runtime: RUNTIME,
       handler: HANDLER_NAME,
@@ -63,17 +108,6 @@ export class GoogleCalendarApi extends Stack {
       authType: lambda.FunctionUrlAuthType.NONE, // 認証なし
     });
 
-    // // HTTP API の定義
-    // const httpApi = new aws_apigatewayv2.HttpApi(this, "ApiGateway");
-
-    // // ルートとインテグレーションの設定
-    // httpApi.addRoutes({
-    //   path: "/",
-    //   methods: [aws_apigatewayv2.HttpMethod.GET],
-    //   integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
-    //     "AppIntegration",
-    //     fn
-    //   ),
-    // });
+    return fn;
   }
 }
