@@ -51,6 +51,11 @@ export class GoogleCalendarApi extends cdk.Stack {
       layers: [myLayer],
     });
 
+    fn.addEnvironment(
+      "GOOGLE_CALENDAR_API_KEY",
+      process.env.GOOGLE_CALENDAR_API_KEY || ""
+    );
+
     // HTTP API の定義
     const httpApi = new aws_apigatewayv2.HttpApi(this, "ApiGateway");
 
@@ -60,6 +65,15 @@ export class GoogleCalendarApi extends cdk.Stack {
       methods: [aws_apigatewayv2.HttpMethod.GET],
       integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
         "HelloIntegration",
+        fn
+      ),
+    });
+
+    httpApi.addRoutes({
+      path: "/list",
+      methods: [aws_apigatewayv2.HttpMethod.GET],
+      integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
+        "ListIntegration",
         fn
       ),
     });
