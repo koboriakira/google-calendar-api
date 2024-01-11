@@ -9,6 +9,10 @@ import requests
 import os
 import json
 import yaml
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
 app = FastAPI(
     title="Example Test API",
@@ -33,12 +37,14 @@ CATEGORY_ACHIVEMENT = "実績"
 
 @app.get("/list", response_model=list[dict])
 def get_calendar(start_date: DateObject, end_date: DateObject, achievement: Optional[bool] = False):
+    logger.info(f"get_calendar: {start_date} - {end_date} achievement: {achievement}")
 
     # UTC+00:00で検索してしまうため、ちょっと広めに検索して、あとで絞る
     replaced_start_date = start_date - timedelta(days=1)
 
     url = f"{GAS_CALENDAR_API_URI}?startDate={replaced_start_date}&endDate={end_date}"
     response = requests.get(url)
+    logger.info(response.text)
     # \xa0が入っているので、置換する
     data = json.loads(response.text.replace("\xa0", " "))
 
