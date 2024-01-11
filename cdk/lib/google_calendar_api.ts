@@ -56,26 +56,30 @@ export class GoogleCalendarApi extends cdk.Stack {
       process.env.GOOGLE_CALENDAR_API_KEY || ""
     );
 
-    // HTTP API の定義
-    const httpApi = new aws_apigatewayv2.HttpApi(this, "ApiGateway");
-
-    // ルートとインテグレーションの設定
-    httpApi.addRoutes({
-      path: "/hello",
-      methods: [aws_apigatewayv2.HttpMethod.GET],
-      integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
-        "HelloIntegration",
-        fn
-      ),
+    fn.addFunctionUrl({
+      authType: aws_lambda.FunctionUrlAuthType.NONE, // 認証なし
     });
 
-    httpApi.addRoutes({
-      path: "/list",
-      methods: [aws_apigatewayv2.HttpMethod.GET],
-      integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
-        "ListIntegration",
-        fn
-      ),
-    });
+    // // HTTP API の定義
+    // const httpApi = new aws_apigatewayv2.HttpApi(this, "ApiGateway");
+
+    // // ルートとインテグレーションの設定
+    // httpApi.addRoutes({
+    //   path: "/hello",
+    //   methods: [aws_apigatewayv2.HttpMethod.GET],
+    //   integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
+    //     "HelloIntegration",
+    //     fn
+    //   ),
+    // });
+
+    // httpApi.addRoutes({
+    //   path: "/list",
+    //   methods: [aws_apigatewayv2.HttpMethod.GET],
+    //   integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
+    //     "ListIntegration",
+    //     fn
+    //   ),
+    // });
   }
 }
