@@ -10,3 +10,6 @@ deploy:
 
 bootstrap:
 	cd cdk && cdk bootstrap --profile private
+
+run:
+	cd app && uvicorn main:app --reload
