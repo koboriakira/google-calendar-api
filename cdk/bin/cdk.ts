@@ -2,19 +2,44 @@
 /** @format */
 
 import "source-map-support/register";
-import * as cdk from "aws-cdk-lib";
+import { App } from "aws-cdk-lib";
 import { GoogleCalendarApi } from "../lib/google_calendar_api";
+import { Template } from "aws-cdk-lib/assertions";
 
-const app = new cdk.App();
-new GoogleCalendarApi(app, "GoogleCalendarApi", {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+describe("GoogleCalendarApi Stack", () => {
+  const app = new App();
+  const stack = new GoogleCalendarApi(app, "TestStack");
+
+  it("creates an IAM role", () => {
+    const assert = Template.fromStack(stack);
+    assert.resourceCountIs("AWS::IAM::Role", 1);
+    assert.hasResourceProperties("AWS::IAM::Role", {
+      AssumeRolePolicyDocument: {
+        Statement: [
+          {
+            Action: "sts:AssumeRole",
+            Effect: "Allow",
+            Principal: {
+              Service: "lambda.amazonaws.com",
+            },
+          },
+        ],
+        Version: "2012-10-17",
+      },
+    });
+  });
+
+  it("creates a Lambda layer", () => {
+    const assert = Template.fromStack(stack);
+    assert.resourceCountIs("AWS::Lambda::LayerVersion", 1);
+  });
+
+  it("creates a Lambda function", () => {
+    const assert = Template.fromStack(stack);
+    assert.resourceCountIs("AWS::Lambda::Function", 1);
+    assert.hasResourceProperties("AWS::Lambda::Function", {
+      Handler: "main.handler",
+      Runtime: "python3.11",
+    });
+  });
 });
