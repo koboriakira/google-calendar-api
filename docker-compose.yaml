@@ -1,0 +1,15 @@
+# @format
+
+version: "3.0"
+
+services:
+  api:
+    container_name: "gc-api"
+    volumes:
+      - ./app:/workspace/app:cached
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    command: bash -c /usr/local/bin/start.sh
+    ports:
+      - 10112:8080
