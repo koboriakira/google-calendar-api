@@ -51,10 +51,7 @@ export class GoogleCalendarApi extends cdk.Stack {
       layers: [myLayer],
     });
 
-    fn.addEnvironment(
-      "GOOGLE_CALENDAR_API_KEY",
-      process.env.GOOGLE_CALENDAR_API_KEY || ""
-    );
+    fn.addEnvironment("GAS_DEPLOY_ID", process.env.GAS_DEPLOY_ID || "");
 
     fn.addFunctionUrl({
       authType: aws_lambda.FunctionUrlAuthType.NONE, // 認証なし
