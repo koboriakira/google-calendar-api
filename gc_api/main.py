@@ -98,5 +98,4 @@ def get_calendar(start_date: DateObject, end_date: DateObject, achievement: Opti
                         end_date))
 
 
-
 handler = Mangum(app, lifespan="off")
