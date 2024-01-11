@@ -1,61 +1,66 @@
 /** @format */
 
-import * as cdk from "aws-cdk-lib";
 import {
-  aws_lambda,
-  aws_iam,
-  aws_apigatewayv2,
-  aws_apigatewayv2_integrations,
+  Stack,
+  StackProps,
+  Duration,
+  aws_lambda as lambda,
+  aws_iam as iam,
+  // aws_apigatewayv2,
+  // aws_apigatewayv2_integrations,
 } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import * as fs from "fs";
-import * as path from "path";
-import * as yaml from "yaml";
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
 
-export class GoogleCalendarApi extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+// CONFIG
+const RUNTIME = lambda.Runtime.PYTHON_3_11;
+const TIMEOUT = 30;
+const APP_DIR_PATH = "../gc_api";
+const HANDLER_NAME = "main.handler";
+const LAYER_ZIP_PATH = "../dependencies.zip";
+
+export class GoogleCalendarApi extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     // Lambdaの実行ロールを取得または新規作成
-    const role = new aws_iam.Role(this, "LambdaRole", {
-      assumedBy: new aws_iam.ServicePrincipal("lambda.amazonaws.com"),
+    const role = new iam.Role(this, "LambdaRole", {
+      assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
     });
 
     // Lambda の実行ロールに管理ポリシーを追加
     role.addManagedPolicy(
-      aws_iam.ManagedPolicy.fromAwsManagedPolicyName(
+      iam.ManagedPolicy.fromAwsManagedPolicyName(
         "service-role/AWSLambdaBasicExecutionRole"
       )
     );
 
     // 必要に応じて追加の権限をポリシーとしてロールに付与
     role.addToPrincipalPolicy(
-      new aws_iam.PolicyStatement({
+      new iam.PolicyStatement({
         actions: ["lambda:InvokeFunction", "lambda:InvokeAsync"],
         resources: ["*"],
       })
     );
 
     // Lambda レイヤーの定義
-    const myLayer = new aws_lambda.LayerVersion(this, "Layer", {
-      code: aws_lambda.Code.fromAsset("../dependencies.zip"), // レイヤーの内容を含むディレクトリ
-      compatibleRuntimes: [aws_lambda.Runtime.PYTHON_3_11], // このレイヤーが互換性を持つランタイム
+    const myLayer = new lambda.LayerVersion(this, "Layer", {
+      code: lambda.Code.fromAsset(LAYER_ZIP_PATH), // レイヤーの内容を含むディレクトリ
+      compatibleRuntimes: [RUNTIME], // このレイヤーが互換性を持つランタイム
     });
 
-    const fn = new aws_lambda.Function(this, "Lambda", {
-      runtime: aws_lambda.Runtime.PYTHON_3_11,
-      handler: "main.handler",
-      code: aws_lambda.Code.fromAsset("../gc_api"),
+    const fn = new lambda.Function(this, "Lambda", {
+      runtime: RUNTIME,
+      handler: HANDLER_NAME,
+      code: lambda.Code.fromAsset(APP_DIR_PATH),
       role: role,
       layers: [myLayer],
-      timeout: cdk.Duration.seconds(30),
+      timeout: Duration.seconds(TIMEOUT),
     });
 
     fn.addEnvironment("GAS_DEPLOY_ID", process.env.GAS_DEPLOY_ID || "");
 
     fn.addFunctionUrl({
-      authType: aws_lambda.FunctionUrlAuthType.NONE, // 認証なし
+      authType: lambda.FunctionUrlAuthType.NONE, // 認証なし
     });
 
     // // HTTP API の定義
@@ -63,19 +68,10 @@ export class GoogleCalendarApi extends cdk.Stack {
 
     // // ルートとインテグレーションの設定
     // httpApi.addRoutes({
-    //   path: "/hello",
+    //   path: "/",
     //   methods: [aws_apigatewayv2.HttpMethod.GET],
     //   integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
-    //     "HelloIntegration",
-    //     fn
-    //   ),
-    // });
-
-    // httpApi.addRoutes({
-    //   path: "/list",
-    //   methods: [aws_apigatewayv2.HttpMethod.GET],
-    //   integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
-    //     "ListIntegration",
+    //     "AppIntegration",
     //     fn
     //   ),
     // });

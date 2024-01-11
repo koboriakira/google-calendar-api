@@ -32,7 +32,6 @@ def hello():
         'status': 'ok',
     }
 
-
 GAS_DEPLOY_ID = os.environ.get("GAS_DEPLOY_ID")
 GAS_CALENDAR_API_URI = f"https://script.google.com/macros/s/{GAS_DEPLOY_ID}/exec"
 CATEGORY_ACHIVEMENT = "実績"
