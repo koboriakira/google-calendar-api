@@ -22,26 +22,9 @@ export class GoogleCalendarApi extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // Lambdaの実行ロールを取得または新規作成
     const role = this.makeRole();
-
-    // Lambda レイヤーの定義
     const myLayer = this.makeLayer();
-
     const fn = this.createLambdaFunction(role, myLayer);
-
-    // // HTTP API の定義
-    // const httpApi = new aws_apigatewayv2.HttpApi(this, "ApiGateway");
-
-    // // ルートとインテグレーションの設定
-    // httpApi.addRoutes({
-    //   path: "/",
-    //   methods: [aws_apigatewayv2.HttpMethod.GET],
-    //   integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
-    //     "AppIntegration",
-    //     fn
-    //   ),
-    // });
   }
 
   /**
@@ -109,5 +92,24 @@ export class GoogleCalendarApi extends Stack {
     });
 
     return fn;
+  }
+
+  /**
+   * Create an API Gateway.
+   * @param {lambda.Function} fn The Lambda function to be integrated.
+   */
+  makeApiGateway(fn: lambda.Function) {
+    // // HTTP API の定義
+    // const httpApi = new aws_apigatewayv2.HttpApi(this, "ApiGateway");
+    // // ルートとインテグレーションの設定
+    // httpApi.addRoutes({
+    //   path: "/",
+    //   methods: [aws_apigatewayv2.HttpMethod.GET],
+    //   integration: new aws_apigatewayv2_integrations.HttpLambdaIntegration(
+    //     "AppIntegration",
+    //     fn
+    //   ),
+    // });
+    // return httpApi;
   }
 }
