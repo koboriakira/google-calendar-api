@@ -12,4 +12,4 @@ bootstrap:
 	cd cdk && cdk bootstrap --profile private
 
 run:
-	cd app && uvicorn main:app --reload
+	cd app && open http://localhost:10111/docs && uvicorn main:app --reload --port 10111
