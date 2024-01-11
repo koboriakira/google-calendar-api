@@ -9,3 +9,9 @@ https://j5xbcoq5o2.execute-api.ap-northeast-1.amazonaws.com/hello
 ```
 pip install -r requirements.txt -t ../layer/python
 ```
+
+## ローカル開発
+
+```shell
+make run
+```
