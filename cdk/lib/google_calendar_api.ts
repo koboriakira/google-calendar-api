@@ -46,7 +46,7 @@ export class GoogleCalendarApi extends cdk.Stack {
     const fn = new aws_lambda.Function(this, "Lambda", {
       runtime: aws_lambda.Runtime.PYTHON_3_11,
       handler: "main.handler",
-      code: aws_lambda.Code.fromAsset("../app"),
+      code: aws_lambda.Code.fromAsset("../gc_api"),
       role: role,
       layers: [myLayer],
       timeout: cdk.Duration.seconds(30),

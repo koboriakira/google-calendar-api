@@ -6,10 +6,11 @@ services:
   api:
     container_name: "gc-api"
     volumes:
-      - ./app:/workspace/app:cached
+      - ./gc_api:/workspace/gc_api:cached
     build:
       context: .
       dockerfile: docker/api/Dockerfile
-    command: bash -c /usr/local/bin/start.sh
+    working_dir: /workspace
+    command: uvicorn gc_api.main:app --reload --port=8080 --host=0.0.0.0
     ports:
       - 10112:8080

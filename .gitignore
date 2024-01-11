@@ -1,4 +1,4 @@
-app/.venv
+gc_api/.venv
 __pycache__
 python
 dependencies.zip

@@ -9,10 +9,9 @@ import requests
 import os
 import json
 import yaml
-import logging
+from gc_api.custom_logger import get_logger
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger()
+logger = get_logger(__name__)
 
 app = FastAPI(
     title="Example Test API",
@@ -26,6 +25,7 @@ def hello():
     """
     Return a greeting
     """
+    logger.info("hello")
     return {
         'status': 'ok',
     }

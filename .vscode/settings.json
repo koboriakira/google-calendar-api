@@ -1,5 +1,5 @@
 {
-  "python.testing.pytestArgs": ["app"],
+  "python.testing.pytestArgs": ["gc_api"],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true
 }
