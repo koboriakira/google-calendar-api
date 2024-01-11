@@ -38,18 +38,17 @@ export class GoogleCalendarApi extends cdk.Stack {
     );
 
     // Lambda レイヤーの定義
-    // const myLayer = new aws_lambda.LayerVersion(this, "Layer", {
-    //   // "python"ディレクトリごと送らないといけないことに注意
-    //   code: aws_lambda.Code.fromAsset("../dependencies.zip"), // レイヤーの内容を含むディレクトリ
-    //   compatibleRuntimes: [aws_lambda.Runtime.PYTHON_3_11], // このレイヤーが互換性を持つランタイム
-    // });
+    const myLayer = new aws_lambda.LayerVersion(this, "Layer", {
+      code: aws_lambda.Code.fromAsset("../dependencies.zip"), // レイヤーの内容を含むディレクトリ
+      compatibleRuntimes: [aws_lambda.Runtime.PYTHON_3_11], // このレイヤーが互換性を持つランタイム
+    });
 
     const fn = new aws_lambda.Function(this, "Lambda", {
       runtime: aws_lambda.Runtime.PYTHON_3_11,
       handler: "main.handler",
       code: aws_lambda.Code.fromAsset("../app"),
       role: role,
-      // layers: [myLayer],
+      layers: [myLayer],
     });
 
     // HTTP API の定義
