@@ -1,11 +1,32 @@
-import logging
+from mangum import Mangum
+from fastapi import FastAPI
 
-logger = logging.Logger(name=__name__)
+APP = FastAPI(
+    title="Example Test API",
+    description="Describe API documentation to be served; types come from "
+    "pydantic, routes from the decorators, and docs from the fastapi internal",
+    version="0.0.1",
+)
 
-def handler(event, context):
-    logger.info(event)
+@APP.get("/hello")
+def hello():
+    """
+    Return a greeting
+    """
     return {
-        # 'statusCode': 200,
-        # 'body': 'Hello World!'
-        'status': "ok",
+        'status': 'ok',
     }
+
+
+
+@APP.get("/v1/items")
+def list_items():
+    """
+    Return a collection of items
+    """
+    return {
+        'message': 'Hello, world!'
+    }
+
+
+handler = Mangum(APP, lifespan="off")
