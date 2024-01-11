@@ -37,7 +37,7 @@
   // "shutdownAction": "none",
 
   // Uncomment the next line to run commands after the container is created.
-  // "postCreateCommand": "/usr/local/bin/start.sh"
+  // "postCreateCommand": ""
 
   // Configure tool-specific properties.
   // "customizations": {},

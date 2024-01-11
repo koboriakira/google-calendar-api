@@ -12,6 +12,8 @@ import yaml
 from gc_api.custom_logger import get_logger
 
 logger = get_logger(__name__)
+logger.info("start")
+logger.debug("debug: ON")
 
 app = FastAPI(
     title="Example Test API",
