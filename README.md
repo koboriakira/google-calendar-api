@@ -1,16 +1,18 @@
-https://j5xbcoq5o2.execute-api.ap-northeast-1.amazonaws.com/hello
-
 ## デプロイ
+
+```shell
+make deploy
+```
 
 ### レイヤーの更新
 
-`cdk deploy`の前に下記コマンドを実行して、必要なライブラリをローカルに用意しておく
-
-```
-pip install -r requirements.txt -t ../layer/python
+```shell
+make generate_layer
 ```
 
 ## ローカル開発
+
+Dev Containerも準備済。
 
 ```shell
 make run
