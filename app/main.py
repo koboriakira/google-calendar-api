@@ -1,5 +1,6 @@
 from mangum import Mangum
 from fastapi import FastAPI
+from router import list
 
 app = FastAPI(
     title="Example Test API",
@@ -17,16 +18,8 @@ def hello():
         'status': 'ok',
     }
 
-
-
-@app.get("/v1/items")
-def list_items():
-    """
-    Return a collection of items
-    """
-    return {
-        'message': 'Hello, world!'
-    }
+app.include_router(list.router,
+                   prefix="/list", tags=["list"])
 
 
 handler = Mangum(app, lifespan="off")
