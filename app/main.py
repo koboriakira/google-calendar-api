@@ -1,14 +1,14 @@
 from mangum import Mangum
 from fastapi import FastAPI
 
-APP = FastAPI(
+app = FastAPI(
     title="Example Test API",
     description="Describe API documentation to be served; types come from "
     "pydantic, routes from the decorators, and docs from the fastapi internal",
     version="0.0.1",
 )
 
-@APP.get("/hello")
+@app.get("/hello")
 def hello():
     """
     Return a greeting
@@ -19,7 +19,7 @@ def hello():
 
 
 
-@APP.get("/v1/items")
+@app.get("/v1/items")
 def list_items():
     """
     Return a collection of items
@@ -29,4 +29,4 @@ def list_items():
     }
 
 
-handler = Mangum(APP, lifespan="off")
+handler = Mangum(app, lifespan="off")
