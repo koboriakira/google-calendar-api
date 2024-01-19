@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    # inputs:
+    #   target-stack:
+    #     description: "デプロイ対象のStackを選択してください"
+    #     required: true
+    #     type: choice
+    #     options:
+    #       - "--all"
+    #     default: "--all"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Generate Lambda Layer
+        uses: koboriakira/gh-actions/aws/generate-lambda-layer
+
+      - name: CDK Deploy
+        uses: koboriakira/gh-actions/aws/deploy_cdk
