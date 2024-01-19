@@ -4,18 +4,19 @@ name: Deploy
 
 on:
   workflow_dispatch:
-    # inputs:
-    #   target-stack:
-    #     description: "デプロイ対象のStackを選択してください"
-    #     required: true
-    #     type: choice
-    #     options:
-    #       - "--all"
-    #     default: "--all"
+    inputs:
+      environment:
+        description: "環境名"
+        required: true
+        type: choice
+        options:
+          - "production"
+        default: "production"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     permissions:
       id-token: write
       contents: read
@@ -28,7 +29,14 @@ jobs:
       - name: Generate Lambda Layer
         uses: koboriakira/gh-actions/aws/generate-lambda-layer@main
 
+      - name: Make dotenv
+        working-directory: ./cdk
+        run: |
+          echo "GAS_DEPLOY_ID=${{ secrets.GAS_DEPLOY_ID }}" >> .env
+          cat .env
+
       - name: CDK Deploy
         uses: koboriakira/gh-actions/aws/deploy_cdk@main
         with:
           workdir: cdk
+          aws-role: ${{ secrets.AWS_ROLE }}
