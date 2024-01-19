@@ -1,5 +1,5 @@
 from mangum import Mangum
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from datetime import date as DateObject
 from datetime import datetime as DateTimeObject
 from datetime import time as TimeObject
@@ -14,6 +14,16 @@ from custom_logger import get_logger
 logger = get_logger(__name__)
 logger.info("start")
 logger.debug("debug: ON")
+
+GAS_DEPLOY_ID = os.environ.get("GAS_DEPLOY_ID")
+GAS_CALENDAR_API_URI = f"https://script.google.com/macros/s/{GAS_DEPLOY_ID}/exec"
+CATEGORY_ACHIVEMENT = "実績"
+
+def valid_saccess_token(secret: str) -> None:
+    # GASのデプロイIDを使って、アクセストークンを検証する
+    if secret != GAS_DEPLOY_ID:
+        raise Exception("invalid secret: " + secret)
+
 
 app = FastAPI(
     title="Example Test API",
@@ -32,13 +42,13 @@ def hello():
         'status': 'ok',
     }
 
-GAS_DEPLOY_ID = os.environ.get("GAS_DEPLOY_ID")
-GAS_CALENDAR_API_URI = f"https://script.google.com/macros/s/{GAS_DEPLOY_ID}/exec"
-CATEGORY_ACHIVEMENT = "実績"
-
 @app.get("/list", response_model=list[dict])
-def get_calendar(start_date: DateObject, end_date: DateObject, achievement: Optional[bool] = False):
+def get_calendar(start_date: DateObject,
+                 end_date: DateObject,
+                 achievement: Optional[bool] = False,
+                 access_token: Optional[str] = Header(None)):
     logger.info(f"get_calendar: {start_date} - {end_date} achievement: {achievement}")
+    valid_saccess_token(access_token)
 
     # UTC+00:00で検索してしまうため、ちょっと広めに検索して、あとで絞る
     replaced_start_date = start_date - timedelta(days=1)
