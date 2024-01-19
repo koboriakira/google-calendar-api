@@ -29,14 +29,16 @@ jobs:
       - name: Generate Lambda Layer
         uses: koboriakira/gh-actions/aws/generate-lambda-layer@main
 
-      - name: Make dotenv
-        working-directory: ./cdk
-        run: |
-          echo "GAS_DEPLOY_ID=${{ secrets.GAS_DEPLOY_ID }}" >> .env
-          cat .env
+      # - name: Make dotenv
+      #   working-directory: ./cdk
+      #   run: |
+      #     echo "GAS_DEPLOY_ID=${{ secrets.GAS_DEPLOY_ID }}" >> .env
+      #     cat .env
 
       - name: CDK Deploy
         uses: koboriakira/gh-actions/aws/deploy_cdk@main
         with:
           workdir: cdk
           aws-role: ${{ secrets.AWS_ROLE }}
+        env:
+          GAS_DEPLOY_ID: ${{ secrets.GAS_DEPLOY_ID }}
