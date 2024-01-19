@@ -48,6 +48,7 @@ def get_calendar(start_date: DateObject,
                  achievement: Optional[bool] = False,
                  access_token: Optional[str] = Header(None)):
     logger.info(f"get_calendar: {start_date} - {end_date} achievement: {achievement}")
+    logger.info(f"access_token: {access_token}")
     valid_saccess_token(access_token)
 
     # UTC+00:00で検索してしまうため、ちょっと広めに検索して、あとで絞る
