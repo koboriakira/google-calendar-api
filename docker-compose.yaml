@@ -6,7 +6,7 @@ services:
   api:
     container_name: "gc-api"
     volumes:
-      - ./gc_api:/workspace/gc_api:cached
+      - ./:/workspace:cached
     build:
       context: .
       dockerfile: docker/api/Dockerfile
