@@ -17,7 +17,10 @@
 
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python"],
+      "extensions": [
+        "ms-python.python",
+        "me-dutour-mathieu.vscode-github-actions"
+      ],
       "settings": {
         "python.linting.enabled": true
       }
