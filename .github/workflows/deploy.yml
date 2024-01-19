@@ -1,3 +1,5 @@
+# @format
+
 name: Deploy
 
 on:
@@ -24,7 +26,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Generate Lambda Layer
-        uses: koboriakira/gh-actions/aws/generate-lambda-layer
+        uses: koboriakira/gh-actions/aws/generate-lambda-layer@main
 
       - name: CDK Deploy
-        uses: koboriakira/gh-actions/aws/deploy_cdk
+        uses: koboriakira/gh-actions/aws/deploy_cdk@main
