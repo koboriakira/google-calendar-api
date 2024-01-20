@@ -1,5 +1,6 @@
-run:
-	cd gc_api && open http://localhost:10111/docs && uvicorn main:gc_api --reload --port 10111
+dev:
+	docker compose up -d
+	open http://localhost:10112/docs
 
 cdk-test:
 	cd cdk && npm run test
