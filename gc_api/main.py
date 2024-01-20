@@ -19,11 +19,13 @@ GAS_DEPLOY_ID = os.environ.get("GAS_DEPLOY_ID")
 GAS_CALENDAR_API_URI = f"https://script.google.com/macros/s/{GAS_DEPLOY_ID}/exec"
 CATEGORY_ACHIVEMENT = "実績"
 
-def valid_authorization(authorization: str) -> None:
+def valid_authorization(access_token: Optional[str]) -> None:
     # GASのデプロイIDを使って、アクセストークンを検証する
-    right_authorization = f"Bearer {GAS_DEPLOY_ID}"
-    if authorization != right_authorization:
-        raise Exception("invalid authorization: " + authorization)
+    if access_token is None:
+        raise Exception("access_token is None")
+    right_access_token = f"Bearer {GAS_DEPLOY_ID}"
+    if access_token != right_access_token:
+        raise Exception("invalid access_token: " + access_token)
 
 
 app = FastAPI(
@@ -47,10 +49,10 @@ def hello():
 def get_calendar(start_date: DateObject,
                  end_date: DateObject,
                  achievement: Optional[bool] = False,
-                 Authorization: Optional[str] = Header(None)):
+                 access_token: Optional[str] = Header(None)):
     logger.info(f"get_calendar: {start_date} - {end_date} achievement: {achievement}")
-    logger.info(f"Authorization: {Authorization}")
-    valid_authorization(Authorization)
+    logger.info(f"Authorization: {access_token}")
+    valid_authorization(access_token)
 
     # UTC+00:00で検索してしまうため、ちょっと広めに検索して、あとで絞る
     replaced_start_date = start_date - timedelta(days=1)
