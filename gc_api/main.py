@@ -1,5 +1,5 @@
 from mangum import Mangum
-from fastapi import FastAPI, Header
+from fastapi import FastAPI, Header, HTTPException
 import os
 from datetime import date as DateObject
 from typing import Optional
@@ -19,10 +19,10 @@ gas_api = GasApi()
 def valid_authorization(access_token: Optional[str]) -> None:
     # GASのデプロイIDを使って、アクセストークンを検証する
     if access_token is None:
-        raise Exception("access_token is None")
+        raise HTTPException(status_code=401, detail="access_token is None")
     right_access_token = f"Bearer {GAS_DEPLOY_ID}"
     if access_token != right_access_token:
-        raise Exception("invalid access_token: " + access_token)
+        raise HTTPException(status_code=401, detail="invalid access_token: " + access_token)
 
 
 app = FastAPI(
@@ -40,7 +40,10 @@ def get_calendar(start_date: DateObject = DateObject.today(),
     return gas_api.get(start_date, end_date, achievement)
 
 @app.post("/schedule")
-def post_schedule(request: PostScheduleRequest):
+def post_schedule(request: PostScheduleRequest,
+                  access_token: Optional[str] = Header(None)):
+    logger.info(f"post_schedule: {request}")
+    valid_authorization(access_token)
     data = {
         "category": request.category,
         "startTime": request.start.isoformat(),
