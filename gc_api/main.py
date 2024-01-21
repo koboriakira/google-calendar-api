@@ -7,6 +7,7 @@ from custom_logger import get_logger
 from infrastructure.gas_api import GasApi
 from infrastructure.schedule_response import ScheduleResponse
 from infrastructure.post_schedule_request import PostScheduleRequest
+from util.environment import Environment
 
 logger = get_logger(__name__)
 logger.info("start")
@@ -36,14 +37,14 @@ def get_calendar(start_date: DateObject = DateObject.today(),
                  achievement: Optional[bool] = False,
                  access_token: Optional[str] = Header(None)):
     logger.info(f"get_calendar: {start_date} - {end_date} achievement: {achievement}")
-    valid_authorization(access_token)
+    Environment.validate_access_token(access_token)
     return gas_api.get(start_date, end_date, achievement)
 
 @app.post("/schedule")
 def post_schedule(request: PostScheduleRequest,
                   access_token: Optional[str] = Header(None)):
     logger.info(f"post_schedule: {request}")
-    valid_authorization(access_token)
+    Environment.validate_access_token(access_token)
     data = {
         "category": request.category,
         "startTime": request.start.isoformat(),
