@@ -5,6 +5,7 @@ from datetime import date as DateObject
 from typing import Optional
 from custom_logger import get_logger
 from infrastructure.gas_api import GasApi
+from infrastructure.schedule_response import ScheduleResponse
 
 logger = get_logger(__name__)
 logger.info("start")
@@ -28,7 +29,7 @@ app = FastAPI(
     version="0.0.1",
 )
 
-@app.get("/list", response_model=list[dict])
+@app.get("/list", response_model=list[ScheduleResponse])
 def get_calendar(start_date: DateObject = DateObject.today(),
                  end_date: DateObject = DateObject.today(),
                  achievement: Optional[bool] = False,
