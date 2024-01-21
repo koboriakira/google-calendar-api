@@ -3,9 +3,9 @@ from typing import Optional
 
 class ScheduleResponse(BaseModel):
     category: str = Field(description="Category of the schedule")
-    start: str = Field(description="Start datetime of the schedule", regex=r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\+\d{2}:\d{2}")
-    end: str = Field(description="End datetime of the schedule", regex=r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\+\d{2}:\d{2}")
-    title: list[str] = Field(description="Title of the schedule")
+    start: str = Field(description="Start datetime of the schedule", regex=r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}")
+    end: str = Field(description="End datetime of the schedule", regex=r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}")
+    title: str = Field(description="Title of the schedule")
     detail: Optional[dict] = Field(description="Detail of the schedule")
 
     def __hash__(self):

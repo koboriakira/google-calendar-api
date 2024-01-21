@@ -30,8 +30,8 @@ class ScheduleResponseTranslator:
         description = DescriptionTranslator.translate(schedule)
         return ScheduleResponse(
             category=schedule["category"],
-            start=start,
-            end=end,
+            start=start.strftime("%Y-%m-%dT%H:%M:%S+09:00"),
+            end=end.strftime("%Y-%m-%dT%H:%M:%S+09:00"),
             title=schedule["title"],
             description=description
         )

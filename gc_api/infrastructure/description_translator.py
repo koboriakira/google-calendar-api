@@ -3,7 +3,7 @@ import yaml
 
 class DescriptionTranslator:
     @staticmethod
-    def translate(self, schedule: dict) -> Optional[dict]:
+    def translate(schedule: dict) -> Optional[dict]:
         if "description" not in schedule:
             return None
         try:
