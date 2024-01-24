@@ -17,7 +17,7 @@ class FindSchedulesUsecase:
         for schedule in schedules:
             logger.info(schedule)
             schedule_start_datetime = DateTime.fromisoformat(schedule.start)
-            if start_datetime <= schedule_start_datetime and schedule_start_datetime <= end_datetime:
+            if start_datetime.timestamp() <= schedule_start_datetime.timestamp() and schedule_start_datetime.timestamp() <= end_datetime.timestamp():
                 result.append(schedule)
         return result
 
