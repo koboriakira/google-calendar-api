@@ -66,7 +66,7 @@ def find_next_schedules(access_token: Optional[str] = Header(None)):
     """
     Environment.validate_access_token(access_token)
     usecase = FindSchedulesUsecase()
-    start_datetime = DateTime.now() + timedelta(hours=9)
+    start_datetime = DateTime.now()
     end_datetime = start_datetime + timedelta(minutes=5)
     result = usecase.execute(start_datetime, end_datetime)
     return result

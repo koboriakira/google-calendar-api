@@ -11,11 +11,12 @@ class FindSchedulesUsecase:
 
     def execute(self, start_datetime: DateTime,
                  end_datetime: DateTime) -> list[dict]:
+        logger.debug(f"start_datetime: {start_datetime} end_datetime: {end_datetime}")
         schedules = self.gas_api.get(start_date=Date.today(), end_date=Date.today())
 
         result = []
         for schedule in schedules:
-            logger.info(schedule)
+            logger.debug(schedule)
             schedule_start_datetime = DateTime.fromisoformat(schedule.start)
             if start_datetime.timestamp() <= schedule_start_datetime.timestamp() and schedule_start_datetime.timestamp() <= end_datetime.timestamp():
                 result.append(schedule)
