@@ -76,7 +76,7 @@ def find_next_schedules(access_token: Optional[str] = Header(None)):
 def post_schedule(request: PostScheduleRequest,
                   access_token: Optional[str] = Header(None)):
     logger.info(f"post_schedule: {request}")
-    Environment.validate_access_token(access_token)
+    # Environment.validate_access_token(access_token)
     data = {
         "category": request.category,
         "startTime": request.start.isoformat(),
