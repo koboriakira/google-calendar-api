@@ -38,8 +38,8 @@ class ScheduleResponseTranslator:
             start=start.strftime("%Y-%m-%dT%H:%M:%S+09:00"),
             end=end.strftime("%Y-%m-%dT%H:%M:%S+09:00"),
             title=schedule["title"],
-            description=description,
-            description_text=description_text,
+            detail=description,
+            description=description_text,
         )
 
     def _filter_achivement(self, data: list[dict]) -> list[dict]:
