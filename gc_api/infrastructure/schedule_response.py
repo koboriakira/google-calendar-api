@@ -7,6 +7,7 @@ class ScheduleResponse(BaseModel):
     end: str = Field(description="End datetime of the schedule", regex=r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}")
     title: str = Field(description="Title of the schedule")
     detail: Optional[dict] = Field(description="Detail of the schedule")
+    description: str|None = Field(description="Description of the schedule")
 
     def __hash__(self):
         return hash(self.id)
